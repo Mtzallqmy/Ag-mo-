@@ -1,0 +1,12 @@
+.gradle/
+.idea/
+local.properties
+**/build/
+*.iml
+*.jks
+*.keystore
+.env
+secrets.properties
+local-models/
+*.gguf
+*.task

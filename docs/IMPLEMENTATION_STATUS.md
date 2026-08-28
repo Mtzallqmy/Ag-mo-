@@ -1,0 +1,7 @@
+# Implementation status
+
+This repository is a **production-oriented foundation**, not a claim that every hardware/provider path is release-certified.
+
+Implemented in this baseline: full multi-module boundaries; pure Kotlin agent loop; typed/versioned prompts; planning dependency graph; progressive tool eligibility; policy/approval contracts; execute-observe-verify semantics; loop/retry budgets; model capability routing; Room schema for required records; Keystore-backed secret storage; accessibility snapshot/pruning/signatures; local inference SPI; OpenAI-compatible/Anthropic/Gemini provider adapters; local provider; MCP streamable-HTTP client; local loopback API skeleton; skills manifests/scanner; optional Termux/SSH/Shizuku policy boundaries; Compose navigation/features; evaluation metrics and regression suite; architecture lint and unit tests.
+
+Release-blocking integrations still require device/vendor validation: concrete LiteRT-LM backend API binding for the selected library release; bundled llama.cpp native source/build flavor and ABI matrix; end-to-end Android tool implementations for every catalog item; real Shizuku client dependency; SSH transport implementation; WorkManager download/scheduler workers; full SSE/streaming for every cloud provider; end-to-end UI state/viewmodels; accessibility instrumentation across OEMs; migration fixture from v1; performance/battery benchmarks; Play signing/release pipeline.

@@ -1,0 +1,2 @@
+package ai.alagent.tools.android
+object NativeToolIds { val CORE=setOf("read_screen","find_element","click_element","tap","long_press","type_text","clear_text","scroll","swipe","back","home","recent_apps","open_app","open_url","share","create_intent","open_file","read_file","write_file","copy_file","move_file","delete_file","list_files","clipboard_read","clipboard_write","notification_read","notification_action","device_info","app_info","http_request","download_file") }
