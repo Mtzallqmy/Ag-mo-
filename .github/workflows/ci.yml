@@ -25,7 +25,13 @@ jobs:
           gradle-version: '8.11.1'
       - name: Architecture policy
         run: python3 scripts/architecture_lint.py
-      - name: JVM and Android unit tests
+      - name: Core network tests
+        run: gradle :core:network:test --stacktrace
+      - name: Skills runtime tests
+        run: gradle :skills:runtime:test --stacktrace
+      - name: Agent runtime tests
+        run: gradle :agent:runtime:test --stacktrace
+      - name: Full JVM and Android unit tests
         run: gradle test testDebugUnitTest --stacktrace
       - name: Android lint
         run: gradle :app:lintDebug --stacktrace
