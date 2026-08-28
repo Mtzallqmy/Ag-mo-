@@ -35,8 +35,12 @@ data class ModelCompatibility(
 class ModelCompatibilityChecker {
     fun check(model: ModelDescriptor, device: DeviceCapabilities): ModelCompatibility {
         val reasons = buildList {
-            model.minimumRamBytes?.let { if (device.totalRamBytes < it) add("RAM below model minimum") }
-            if (model.sizeBytes != null && device.freeStorageBytes < model.sizeBytes) add("Insufficient free storage")
+            model.minimumRamBytes?.let { minimumRamBytes ->
+                if (device.totalRamBytes < minimumRamBytes) add("RAM below model minimum")
+            }
+            model.sizeBytes?.let { sizeBytes ->
+                if (device.freeStorageBytes < sizeBytes) add("Insufficient free storage")
+            }
             if (model.accelerators.isNotEmpty() && model.accelerators.intersect(device.accelerators).isEmpty()) {
                 add("No compatible accelerator; CPU fallback not declared")
             }
