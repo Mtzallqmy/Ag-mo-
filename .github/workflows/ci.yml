@@ -26,8 +26,8 @@ jobs:
       - name: Architecture policy
         run: python3 scripts/architecture_lint.py
       - name: JVM and Android unit tests
-        run: gradle test testDebugUnitTest --stacktrace
+        run: gradle --no-daemon test testDebugUnitTest --stacktrace
       - name: Android lint
-        run: gradle :app:lintDebug --stacktrace
+        run: gradle --no-daemon :app:lintDebug --stacktrace
       - name: Assemble debug APK
-        run: gradle :app:assembleDebug --stacktrace
+        run: gradle --no-daemon :app:assembleDebug --stacktrace

@@ -8,6 +8,9 @@ android {
     compileSdk = 36
     defaultConfig { minSdk = 28 }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
+    testOptions {
+        unitTests.all { it.useJUnitPlatform() }
+    }
 }
 dependencies {
     api(project(":skills:api"))
@@ -15,5 +18,5 @@ dependencies {
     implementation(project(":agent:policy"))
     implementation(project(":core:files"))
     implementation(libs.kotlinx.serialization.json)
-
+    testImplementation(libs.junit.jupiter)
 }
