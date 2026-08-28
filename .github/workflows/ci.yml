@@ -27,6 +27,24 @@ jobs:
         run: python3 scripts/architecture_lint.py
       - name: Core network tests
         run: gradle :core:network:test --stacktrace
+      - name: Skill loader data-only test
+        continue-on-error: true
+        run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.loader accepts bounded data-only skill package' --stacktrace
+      - name: Skill executable rejection test
+        continue-on-error: true
+        run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.loader rejects executable skill assets' --stacktrace
+      - name: Skill symlink rejection test
+        continue-on-error: true
+        run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.loader rejects symbolic links' --stacktrace
+      - name: Skill scanner test
+        continue-on-error: true
+        run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.security scanner rejects executable instruction patterns' --stacktrace
+      - name: Skill validator test
+        continue-on-error: true
+        run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.validator rejects unknown tool ids' --stacktrace
+      - name: Skill installer test
+        continue-on-error: true
+        run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.installer stages validates and installs inside configured root' --stacktrace
       - name: Skills runtime tests
         run: gradle :skills:runtime:test --stacktrace
       - name: Agent runtime tests
