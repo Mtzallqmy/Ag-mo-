@@ -81,9 +81,10 @@ class LocalAgentApiServer(
             routing {
                 intercept(ApplicationCallPipeline.Plugins) {
                     if (config.remoteAccessEnabled) {
-                        val authorization = call.request.header(HttpHeaders.Authorization)
+                        val currentCall = context.call
+                        val authorization = currentCall.request.header(HttpHeaders.Authorization)
                         if (authorization != "Bearer ${config.bearerToken}") {
-                            call.respond(HttpStatusCode.Unauthorized)
+                            currentCall.respond(HttpStatusCode.Unauthorized)
                             finish()
                         }
                     }
