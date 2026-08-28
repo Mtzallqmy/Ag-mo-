@@ -7,7 +7,7 @@ class AlAgentAccessibilityService : AccessibilityService() {
     companion object {
         @Volatile internal var instance: AlAgentAccessibilityService? = null
         val isConnected: Boolean get() = instance != null
-        val snapshotProvider: AccessibilitySnapshotProvider = AccessibilitySnapshotProvider { instance }
+        val snapshotProvider: AccessibilitySnapshotProvider = AccessibilitySnapshotProvider(service = { instance })
         val actionExecutor: AccessibilityActionExecutor = AccessibilityActionExecutor { instance }
     }
 

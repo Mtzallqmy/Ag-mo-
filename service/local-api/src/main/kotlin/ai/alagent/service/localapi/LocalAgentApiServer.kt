@@ -4,7 +4,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.ApplicationCallPipeline
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
 import io.ktor.server.cio.CIOApplicationEngine
@@ -79,28 +79,52 @@ class LocalAgentApiServer(
         engine = embeddedServer(CIO, host = config.host, port = config.port) {
             install(ContentNegotiation) { json(json) }
             routing {
-                intercept(ApplicationCallPipeline.Plugins) {
-                    if (config.remoteAccessEnabled) {
-                        val authorization = call.request.header(HttpHeaders.Authorization)
-                        if (authorization != "Bearer ${config.bearerToken}") {
-                            call.respond(HttpStatusCode.Unauthorized)
-                            finish()
-                        }
-                    }
+                get("/health") {
+                    if (!call.authorize()) return@get
+                    call.respond(Health())
                 }
-
-                get("/health") { call.respond(Health()) }
-                get("/models") { call.respond(api.models()) }
-                get("/providers") { call.respond(api.providers()) }
-                get("/sessions") { call.respond(api.sessions()) }
-                post("/chat") { call.respond(api.chat(call.receive<ChatRequest>())) }
-                post("/agent/run") { call.respond(api.run(call.receive<AgentRunRequest>())) }
-                post("/agent/stop") { call.respond(api.stop(call.receive<AgentStopRequest>())) }
-                get("/agent/status") { call.respond(api.status()) }
-                get("/tools") { call.respond(api.tools()) }
-                get("/skills") { call.respond(api.skills()) }
-                post("/memory/search") { call.respond(api.searchMemory(call.receive<MemorySearchRequest>())) }
+                get("/models") {
+                    if (!call.authorize()) return@get
+                    call.respond(api.models())
+                }
+                get("/providers") {
+                    if (!call.authorize()) return@get
+                    call.respond(api.providers())
+                }
+                get("/sessions") {
+                    if (!call.authorize()) return@get
+                    call.respond(api.sessions())
+                }
+                post("/chat") {
+                    if (!call.authorize()) return@post
+                    call.respond(api.chat(call.receive<ChatRequest>()))
+                }
+                post("/agent/run") {
+                    if (!call.authorize()) return@post
+                    call.respond(api.run(call.receive<AgentRunRequest>()))
+                }
+                post("/agent/stop") {
+                    if (!call.authorize()) return@post
+                    call.respond(api.stop(call.receive<AgentStopRequest>()))
+                }
+                get("/agent/status") {
+                    if (!call.authorize()) return@get
+                    call.respond(api.status())
+                }
+                get("/tools") {
+                    if (!call.authorize()) return@get
+                    call.respond(api.tools())
+                }
+                get("/skills") {
+                    if (!call.authorize()) return@get
+                    call.respond(api.skills())
+                }
+                post("/memory/search") {
+                    if (!call.authorize()) return@post
+                    call.respond(api.searchMemory(call.receive<MemorySearchRequest>()))
+                }
                 get("/events/stream") {
+                    if (!call.authorize()) return@get
                     call.respondTextWriter(ContentType.Text.EventStream) {
                         api.events().collect { event ->
                             write("data: ")
@@ -112,6 +136,14 @@ class LocalAgentApiServer(
                 }
             }
         }.start(wait = false)
+    }
+
+    private suspend fun ApplicationCall.authorize(): Boolean {
+        if (!config.remoteAccessEnabled) return true
+        val expected = "Bearer ${config.bearerToken}"
+        if (request.header(HttpHeaders.Authorization) == expected) return true
+        respond(HttpStatusCode.Unauthorized)
+        return false
     }
 
     fun stop() {

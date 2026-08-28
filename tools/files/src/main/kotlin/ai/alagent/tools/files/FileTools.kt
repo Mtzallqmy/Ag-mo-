@@ -36,7 +36,7 @@ private abstract class StoreTool(
         ToolObservation("file-operation=${descriptor.id} success=${execution.success}", execution.output)
 }
 
-class ReadFileTool(store: AtomicFileStore) : StoreTool(
+private class ReadFileTool(store: AtomicFileStore) : StoreTool(
     ToolDescriptor("read_file", "Read file", "Read a UTF-8 file inside the AL Agent scoped file workspace.", FileSchemas.path(), riskLevel = RiskLevel.READ_ONLY, category = ToolCategory.FILES), store
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult = runCatching {
@@ -48,7 +48,7 @@ class ReadFileTool(store: AtomicFileStore) : StoreTool(
         if (context.execution.success) VerificationResult(VerificationStatus.SUCCESS, listOf("File read completed")) else VerificationResult(VerificationStatus.FAILED, reason = context.execution.error)
 }
 
-class WriteFileTool(store: AtomicFileStore) : StoreTool(
+private class WriteFileTool(store: AtomicFileStore) : StoreTool(
     ToolDescriptor("write_file", "Write file", "Atomically write UTF-8 text inside the AL Agent scoped file workspace.", FileSchemas.path("text" to "string"), riskLevel = RiskLevel.MEDIUM, category = ToolCategory.FILES), store
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult = runCatching {
@@ -65,7 +65,7 @@ class WriteFileTool(store: AtomicFileStore) : StoreTool(
     }
 }
 
-class ListFilesTool(store: AtomicFileStore) : StoreTool(
+private class ListFilesTool(store: AtomicFileStore) : StoreTool(
     ToolDescriptor("list_files", "List files", "List files inside the AL Agent scoped file workspace.", FileSchemas.path(), riskLevel = RiskLevel.READ_ONLY, category = ToolCategory.FILES), store
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult = runCatching {
@@ -79,7 +79,7 @@ class ListFilesTool(store: AtomicFileStore) : StoreTool(
     override suspend fun verify(request: ToolRequest, context: VerificationContext) = if (context.execution.success) VerificationResult(VerificationStatus.SUCCESS, listOf("Directory listing captured")) else VerificationResult(VerificationStatus.FAILED, reason = context.execution.error)
 }
 
-class CopyFileTool(store: AtomicFileStore) : StoreTool(
+private class CopyFileTool(store: AtomicFileStore) : StoreTool(
     ToolDescriptor("copy_file", "Copy file", "Copy a file within the AL Agent scoped workspace.", FileSchemas.transfer, riskLevel = RiskLevel.MEDIUM, category = ToolCategory.FILES), store
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult = runCatching {
@@ -95,7 +95,7 @@ class CopyFileTool(store: AtomicFileStore) : StoreTool(
     }
 }
 
-class MoveFileTool(store: AtomicFileStore) : StoreTool(
+private class MoveFileTool(store: AtomicFileStore) : StoreTool(
     ToolDescriptor("move_file", "Move file", "Move or rename a file within the AL Agent scoped workspace.", FileSchemas.transfer, riskLevel = RiskLevel.MEDIUM, category = ToolCategory.FILES), store
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult = runCatching {
@@ -111,7 +111,7 @@ class MoveFileTool(store: AtomicFileStore) : StoreTool(
     }
 }
 
-class DeleteFileTool(store: AtomicFileStore) : StoreTool(
+private class DeleteFileTool(store: AtomicFileStore) : StoreTool(
     ToolDescriptor("delete_file", "Delete file", "Delete a file or directory from the AL Agent scoped workspace.", FileSchemas.path("recursive" to "boolean"), riskLevel = RiskLevel.HIGH, requiresConfirmation = true, category = ToolCategory.FILES), store
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult = runCatching {

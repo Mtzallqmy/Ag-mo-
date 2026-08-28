@@ -47,7 +47,7 @@ private abstract class IntentTool(
     }
 }
 
-class OpenAppTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
+private class OpenAppTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
     ToolDescriptor("open_app", "Open app", "Launch an installed application by package name.", schema(mapOf("package_name" to "string")), riskLevel = RiskLevel.LOW, category = ToolCategory.SYSTEM), context, foreground
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult {
@@ -59,7 +59,7 @@ class OpenAppTool(context: Context, foreground: ForegroundAppProbe? = null) : In
     override suspend fun verify(request: ToolRequest, context: VerificationContext) = launchVerification(context, context.execution.metadata["expectedPackage"])
 }
 
-class OpenUrlTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
+private class OpenUrlTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
     ToolDescriptor("open_url", "Open URL", "Open an HTTP or HTTPS URL using Android intent resolution.", schema(mapOf("url" to "string")), riskLevel = RiskLevel.LOW, category = ToolCategory.NETWORK), context, foreground
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult {
@@ -72,7 +72,7 @@ class OpenUrlTool(context: Context, foreground: ForegroundAppProbe? = null) : In
     override suspend fun verify(request: ToolRequest, context: VerificationContext) = launchVerification(context)
 }
 
-class ShareTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
+private class ShareTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
     ToolDescriptor("share", "Share", "Open the Android Sharesheet with explicit text content.", schema(mapOf("text" to "string"), setOf("text")), riskLevel = RiskLevel.HIGH, requiresConfirmation = true, category = ToolCategory.SYSTEM), context, foreground
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult {
@@ -85,7 +85,7 @@ class ShareTool(context: Context, foreground: ForegroundAppProbe? = null) : Inte
     override suspend fun verify(request: ToolRequest, context: VerificationContext) = launchVerification(context)
 }
 
-class OpenFileTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
+private class OpenFileTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
     ToolDescriptor("open_file", "Open file", "Open a content:// URI with a declared MIME type. Raw filesystem paths are rejected.", schema(mapOf("content_uri" to "string", "mime_type" to "string")), riskLevel = RiskLevel.MEDIUM, category = ToolCategory.SYSTEM), context, foreground
 ) {
     override suspend fun execute(request: ToolRequest): ToolExecutionResult {
@@ -100,7 +100,7 @@ class OpenFileTool(context: Context, foreground: ForegroundAppProbe? = null) : I
     override suspend fun verify(request: ToolRequest, context: VerificationContext) = launchVerification(context)
 }
 
-class CreateIntentTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
+private class CreateIntentTool(context: Context, foreground: ForegroundAppProbe? = null) : IntentTool(
     ToolDescriptor(
         "create_intent",
         "Create constrained intent",

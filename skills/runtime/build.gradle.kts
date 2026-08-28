@@ -10,7 +10,7 @@ android {
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 }
 dependencies {
-    implementation(project(":skills:api"))
+    api(project(":skills:api"))
     implementation(project(":tools:api"))
     implementation(project(":agent:policy"))
     implementation(project(":core:files"))

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.weight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -115,8 +114,12 @@ private fun AlAgentRoot(viewModel: MainViewModel) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text("Choose a LiteRT-LM compatible model. Mark tool-calling only when the model is known to follow structured tool instructions.")
                     OutlinedTextField(importContext, { importContext = it.filter(Char::isDigit) }, label = { Text("Context window") })
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Agent/tool capable", Modifier.weight(1f))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Agent/tool capable")
                         Switch(importAgentCapable, { importAgentCapable = it })
                     }
                 }
@@ -125,7 +128,6 @@ private fun AlAgentRoot(viewModel: MainViewModel) {
             dismissButton = { OutlinedButton(onClick = { showModelImport = false }) { Text("Cancel") } }
         )
     }
-
 
     if (showModelDownload) {
         AlertDialog(
@@ -137,8 +139,12 @@ private fun AlAgentRoot(viewModel: MainViewModel) {
                     OutlinedTextField(downloadName, { downloadName = it }, label = { Text("Display name") })
                     OutlinedTextField(downloadChecksum, { downloadChecksum = it.filter { c -> c.isDigit() || c.lowercaseChar() in 'a'..'f' } }, label = { Text("SHA-256 (recommended)") })
                     OutlinedTextField(downloadContext, { downloadContext = it.filter(Char::isDigit) }, label = { Text("Context window") })
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Agent/tool capable", Modifier.weight(1f))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("Agent/tool capable")
                         Switch(downloadAgentCapable, { downloadAgentCapable = it })
                     }
                 }
