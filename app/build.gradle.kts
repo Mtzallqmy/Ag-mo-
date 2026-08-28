@@ -11,10 +11,10 @@ android {
     compileSdk = 36
     defaultConfig {
         applicationId = "ai.alagent"
-        minSdk = 28
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures { compose = true; buildConfig = true }
