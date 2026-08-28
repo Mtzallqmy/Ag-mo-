@@ -159,7 +159,8 @@ class AgentRuntime(
         val b = config.budget
         if (state.toolCallCount >= b.maxToolCalls) return StopReason.MAX_TOOL_CALLS
         if (state.inputTokens >= b.maxInputTokens || state.outputTokens >= b.maxOutputTokens) return StopReason.TOKEN_BUDGET
-        if (b.cloudCostBudgetUsd != null && state.cloudCostUsd >= b.cloudCostBudgetUsd) return StopReason.COST_BUDGET
+        val cloudCostBudgetUsd = b.cloudCostBudgetUsd
+        if (cloudCostBudgetUsd != null && state.cloudCostUsd >= cloudCostBudgetUsd) return StopReason.COST_BUDGET
         return null
     }
 }
