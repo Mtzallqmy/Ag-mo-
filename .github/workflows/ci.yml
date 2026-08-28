@@ -45,8 +45,24 @@ jobs:
       - name: Skill installer test
         continue-on-error: true
         run: gradle :skills:runtime:test --tests '*SkillRuntimeSecurityTest.installer stages validates and installs inside configured root' --stacktrace
-      - name: Skills runtime tests
-        run: gradle :skills:runtime:test --stacktrace
+      - name: Capture full skills runtime test result
+        shell: bash
+        run: |
+          set +e
+          gradle :skills:runtime:test --rerun-tasks --stacktrace
+          code=$?
+          echo "$code" > skills-test-exit.txt
+          exit 0
+      - name: Upload skills test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skills-runtime-test-report
+          if-no-files-found: warn
+          path: |
+            skills/runtime/build/test-results/test/
+            skills/runtime/build/reports/tests/test/
+            skills-test-exit.txt
       - name: Agent runtime tests
         run: gradle :agent:runtime:test --stacktrace
       - name: Full JVM and Android unit tests
@@ -55,3 +71,6 @@ jobs:
         run: gradle :app:lintDebug --stacktrace
       - name: Assemble debug APK
         run: gradle :app:assembleDebug --stacktrace
+      - name: Enforce full skills runtime result
+        if: always()
+        run: test "$(cat skills-test-exit.txt)" = "0"
